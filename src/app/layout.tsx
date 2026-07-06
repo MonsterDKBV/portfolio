@@ -30,7 +30,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://danielkbv.dev'),
+  metadataBase: new URL('https://portfolio-one-sooty-82.vercel.app'),
   title: 'Daniel',
   description:
     'Frontend Developer — React, TypeScript, Next.js. Сайты, админ-панели, дашборды, каталоги и интеграции с API.',
