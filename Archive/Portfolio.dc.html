@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #000000; }
+  ::selection { background: rgba(146,129,247,0.30); color: #ffffff; }
+  @keyframes dsFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes dsMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes dsPulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+  a:focus-visible, button:focus-visible { outline: 2px solid #9281f7; outline-offset: 3px; border-radius: 8px; }
+
+  /* ================= RESPONSIVE ================= */
+  /* base inline styles = desktop; these queries only override down */
+  @media (max-width: 1024px) {
+    .hero-grid { gap: 40px !important; }
+    .exp-grid { gap: 14px !important; }
+    .ai-col { padding: 40px 34px !important; }
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
+    .hero-portrait { order: 2; justify-content: flex-start !important; margin-top: 4px; }
+    .deco-plate { display: none !important; }
+    .deco-chip { display: none !important; }
+    .exp-grid { grid-template-columns: 1fr !important; }
+    .exp-grid > div { grid-column: auto !important; }
+    .ai-grid { grid-template-columns: 1fr !important; }
+    .ai-col + .ai-col { border-left: none !important; border-top: 1px solid #1c1f22; }
+    .about-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
+    .about-media { max-width: 340px; }
+    .process-grid { grid-template-columns: 1fr 1fr !important; }
+    /* project cards -> stacked, text first */
+    .proj-grid { display: flex !important; flex-direction: column !important; }
+    .proj-text { order: 1 !important; border-right: none !important; }
+    .proj-media { order: 2 !important; border-right: none !important; border-top: 1px solid #17191c; }
+  }
+
+  @media (max-width: 768px) {
+    .sect { padding-left: 22px !important; padding-right: 22px !important; }
+    .site-nav { padding: 12px 20px !important; padding-top: calc(env(safe-area-inset-top, 0px) + 12px) !important; }
+    .nav-desktop { display: none !important; }
+    .nav-burger { display: inline-flex !important; }
+    .hero-sec { padding-top: 118px !important; padding-bottom: 60px !important; min-height: 0 !important; }
+    .hero-stats { gap: 22px !important; margin-top: 40px !important; }
+    .ai-col { padding: 34px 24px !important; }
+    .proj-text { padding: 30px 24px !important; }
+    .proj-media { padding: 22px !important; flex-direction: column !important; gap: 12px !important; }
+    .proj-media > div { flex: 1 1 auto !important; width: 100% !important; flex-direction: column !important; }
+    .proj-media img { height: 200px !important; }
+    .portrait-float { animation: none !important; }
+    .marquee-track { animation-duration: 26s !important; }
+  }
+
+  @media (max-width: 640px) {
+    .process-grid { grid-template-columns: 1fr !important; }
+    .contact-btns { width: 100%; gap: 10px !important; }
+    .contact-link { flex: 1 1 42%; justify-content: center; }
+    .site-footer { flex-direction: column; align-items: flex-start !important; gap: 8px; }
+    .hero-actions a { flex: 1 1 auto; justify-content: center; }
+  }
+
+  @media (max-width: 400px) {
+    .portrait-float { width: 100% !important; max-width: 300px; }
+    .hero-stats { flex-wrap: wrap; gap: 18px 26px !important; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+</helmet>
+
+<div style="background:#000000; color:#f0f0f0; font-family:'Geist',system-ui,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative;">
+
+  <!-- ============ NAV ============ -->
+  <nav ref="{{ navRef }}" class="site-nav" style="position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:18px 40px; border-bottom:1px solid rgba(35,38,42,0); background:rgba(0,0,0,0); backdrop-filter:blur(0px); transition:all .4s cubic-bezier(.2,.7,.3,1);">
+    <a href="#top" style="display:flex; align-items:center; gap:11px; text-decoration:none;">
+      <span style="width:26px; height:26px; border:1px solid #2b2f34; border-radius:7px; display:grid; place-items:center; position:relative; background:linear-gradient(145deg,#141518,#050506);">
+        <span style="width:8px; height:8px; background:#9281f7; border-radius:2px; box-shadow:0 0 12px rgba(146,129,247,.8);"></span>
+      </span>
+      <span style="font-size:14px; letter-spacing:-.01em; color:#f0f0f0; font-weight:500;">Даниэл Кубанычбеков</span>
+    </a>
+    <div class="nav-desktop" style="display:flex; align-items:center; gap:30px;">
+      <div style="display:flex; gap:28px; font-size:14.5px; color:#a1a4a5;">
+        <a href="#work" style="color:inherit; text-decoration:none; transition:color .2s;" style-hover="color:#f0f0f0">Работы</a>
+        <a href="#expertise" style="color:inherit; text-decoration:none; transition:color .2s;" style-hover="color:#f0f0f0">Стек</a>
+        <a href="#ai" style="color:inherit; text-decoration:none; transition:color .2s;" style-hover="color:#f0f0f0">AI-workflow</a>
+        <a href="#about" style="color:inherit; text-decoration:none; transition:color .2s;" style-hover="color:#f0f0f0">Обо мне</a>
+      </div>
+      <a href="#contact" style="font-size:13px; color:#f0f0f0; text-decoration:none; padding:8px 16px; border:1px solid #2b2f34; border-radius:8px; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0)); transition:all .25s;" style-hover="border-color:#4a4560; background:rgba(146,129,247,.10)">Связаться</a>
+    </div>
+    <button type="button" class="nav-burger" aria-label="Открыть меню" onClick="{{ toggleMenu }}" style="display:none; align-items:center; justify-content:center; width:44px; height:44px; border:1px solid #2b2f34; border-radius:11px; background:rgba(255,255,255,.03); cursor:pointer; padding:0;">
+      <span ref="{{ burgerRef }}" style="position:relative; width:18px; height:12px; display:block;">
+        <span style="position:absolute; left:0; top:0; width:18px; height:1.6px; background:#f0f0f0; border-radius:2px; transition:transform .3s, top .3s, opacity .2s;"></span>
+        <span style="position:absolute; left:0; top:5px; width:18px; height:1.6px; background:#f0f0f0; border-radius:2px; transition:opacity .2s;"></span>
+        <span style="position:absolute; left:0; top:10px; width:18px; height:1.6px; background:#f0f0f0; border-radius:2px; transition:transform .3s, top .3s, opacity .2s;"></span>
+      </span>
+    </button>
+  </nav>
+
+  <!-- ============ MOBILE DRAWER ============ -->
+  <div ref="{{ drawerRef }}" style="position:fixed; inset:0; z-index:99; background:rgba(3,3,4,.94); backdrop-filter:blur(22px); transform:translateY(-100%); opacity:0; pointer-events:none; transition:transform .45s cubic-bezier(.2,.7,.3,1), opacity .3s; display:flex; flex-direction:column; justify-content:center; gap:6px; padding:40px 30px calc(env(safe-area-inset-bottom,0px) + 40px);">
+    <div style="position:absolute; inset:0; background-image:linear-gradient(rgba(35,38,42,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(35,38,42,.35) 1px,transparent 1px); background-size:56px 56px; mask-image:radial-gradient(ellipse 90% 70% at 50% 40%,#000,transparent 80%); -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 40%,#000,transparent 80%); pointer-events:none;"></div>
+    <div style="position:relative; font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.14em; color:#9281f7; text-transform:uppercase; margin-bottom:20px;">МЕНЮ</div>
+    <a href="#work" onClick="{{ closeMenu }}" style="position:relative; font-family:'Geist',system-ui,sans-serif; font-weight:600; letter-spacing:-.02em; font-size:33px; color:#f0f0f0; text-decoration:none; padding:8px 0; line-height:1.15;">Работы</a>
+    <a href="#expertise" onClick="{{ closeMenu }}" style="position:relative; font-family:'Geist',system-ui,sans-serif; font-weight:600; letter-spacing:-.02em; font-size:33px; color:#f0f0f0; text-decoration:none; padding:8px 0; line-height:1.15;">Стек</a>
+    <a href="#ai" onClick="{{ closeMenu }}" style="position:relative; font-family:'Geist',system-ui,sans-serif; font-weight:600; letter-spacing:-.02em; font-size:33px; color:#f0f0f0; text-decoration:none; padding:8px 0; line-height:1.15;">AI-workflow</a>
+    <a href="#about" onClick="{{ closeMenu }}" style="position:relative; font-family:'Geist',system-ui,sans-serif; font-weight:600; letter-spacing:-.02em; font-size:33px; color:#f0f0f0; text-decoration:none; padding:8px 0; line-height:1.15;">Обо мне</a>
+    <a href="#contact" onClick="{{ closeMenu }}" style="position:relative; margin-top:28px; display:inline-flex; align-items:center; justify-content:center; gap:9px; font-size:16px; color:#0a0a0a; font-weight:500; text-decoration:none; padding:16px 22px; border-radius:12px; background:#f0f0f0;">Связаться <span style="font-family:'Geist Mono',monospace;">→</span></a>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <section id="top" class="hero-sec sect" style="position:relative; min-height:100vh; padding:150px 40px 90px; display:flex; align-items:center; overflow:hidden;">
+    <!-- background line grid -->
+    <div style="position:absolute; inset:0; background-image:linear-gradient(rgba(35,38,42,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(35,38,42,.5) 1px,transparent 1px); background-size:64px 64px; mask-image:radial-gradient(ellipse 90% 70% at 50% 30%,#000 30%,transparent 80%); -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 30%,#000 30%,transparent 80%); pointer-events:none;"></div>
+    <!-- violet glow -->
+    <div style="position:absolute; top:-10%; right:8%; width:640px; height:640px; background:radial-gradient(circle,rgba(146,129,247,.20),transparent 62%); filter:blur(30px); pointer-events:none;"></div>
+    <div style="position:absolute; bottom:-20%; left:-6%; width:520px; height:520px; background:radial-gradient(circle,rgba(146,129,247,.08),transparent 65%); filter:blur(20px); pointer-events:none;"></div>
+
+    <div class="hero-grid" style="position:relative; width:100%; max-width:1240px; margin:0 auto; display:grid; grid-template-columns:1.15fr .85fr; gap:60px; align-items:center;">
+      <!-- LEFT -->
+      <div data-reveal="" style="opacity:0; transform:translateY(24px); transition:all .9s cubic-bezier(.2,.7,.3,1);">
+        <div style="display:inline-flex; align-items:center; gap:10px; font-family:'Geist Mono',monospace; font-size:11.5px; letter-spacing:.12em; color:#a1a4a5; text-transform:uppercase; border:1px solid #23262a; border-radius:100px; padding:6px 14px; margin-bottom:30px; background:rgba(255,255,255,.02);">
+          <span style="width:6px; height:6px; border-radius:50%; background:#9281f7; box-shadow:0 0 10px #9281f7; animation:dsPulse 2.4s ease-in-out infinite;"></span>
+          FRONTEND DEVELOPER · БИШКЕК
+        </div>
+        <h1 style="margin: 0; font-family: 'Geist',system-ui,sans-serif; font-weight: 600; font-size: clamp(44px,5.6vw,64px); line-height: 1.06; letter-spacing: -.03em; color: #ffffff">
+          Делаю понятные интерфейсы,<br>с которыми <span style="color:#baa7ff;">удобно работать</span><br>каждый день.
+        </h1>
+        <p style="margin:32px 0 0; max-width:520px; font-size:17px; line-height:1.62; color:#a7abac; font-weight:300;">
+          Работаю с <span style="color:#f0f0f0;">React, TypeScript и Next.js</span>. Делаю интерфейсы для сайтов, админ-панелей, каталогов и внутренних сервисов: страницы, формы, состояния, адаптив и подключение к API.
+        </p>
+        <div class="hero-actions" style="display:flex; gap:14px; margin-top:38px; flex-wrap:wrap;">
+          <a href="#work" style="display:inline-flex; align-items:center; gap:9px; font-size:14px; color:#0a0a0a; font-weight:500; text-decoration:none; padding:12px 22px; border-radius:10px; background:#f0f0f0; transition:all .25s;" style-hover="background:#ffffff; transform:translateY(-2px)">
+            Смотреть работы
+            <span style="font-family:'Geist Mono',monospace;">→</span>
+          </a>
+          <a href="#contact" style="display:inline-flex; align-items:center; gap:9px; font-size:14px; color:#f0f0f0; text-decoration:none; padding:12px 22px; border-radius:10px; border:1px solid #2b2f34; background:rgba(255,255,255,.02); transition:all .25s;" style-hover="border-color:#4a4560; background:rgba(146,129,247,.08)">
+            Связаться
+          </a>
+        </div>
+        <div class="hero-stats" style="display:flex; gap:34px; margin-top:52px; padding-top:26px; border-top:1px solid #17191c;">
+          <div>
+            <div style="font-family:'Geist',sans-serif; font-weight:500; font-size:32px; color:#ffffff; line-height:1; letter-spacing:-.02em;">2,5<span style="font-size:16px; color:#6b6f72; font-weight:400;"> года</span></div>
+            <div style="font-family:'Geist Mono',monospace; font-size:11.5px; letter-spacing:.05em; color:#8a8e90; text-transform:uppercase; margin-top:9px;">в разработке</div>
+          </div>
+          <div>
+            <div style="font-family:'Geist',sans-serif; font-weight:500; font-size:32px; color:#ffffff; line-height:1; letter-spacing:-.02em;">30<span style="color:#9281f7;">+</span></div>
+            <div style="font-family:'Geist Mono',monospace; font-size:11.5px; letter-spacing:.05em; color:#8a8e90; text-transform:uppercase; margin-top:9px;">проектов</div>
+          </div>
+          <div>
+            <div style="font-family:'Geist',sans-serif; font-weight:500; font-size:32px; color:#ffffff; line-height:1; letter-spacing:-.02em;">10<span style="color:#9281f7;">+</span></div>
+            <div style="font-family:'Geist Mono',monospace; font-size:11.5px; letter-spacing:.05em; color:#8a8e90; text-transform:uppercase; margin-top:9px;">в реальном использовании</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT — art-directed portrait -->
+      <div data-reveal="" class="hero-portrait" style="opacity:0; transform:translateY(24px); transition:all .9s cubic-bezier(.2,.7,.3,1) .15s; position:relative; display:flex; justify-content:center;">
+        <div class="portrait-float" style="position:relative; width:340px; animation:dsFloat 7s ease-in-out infinite;">
+          <!-- back layered plates (pseudo-3D) -->
+          <div class="deco-plate" style="position:absolute; inset:-16px -16px 24px 22px; border:1px solid #23262a; border-radius:24px; transform:rotate(4deg); background:linear-gradient(160deg,rgba(146,129,247,.05),transparent);"></div>
+          <div class="deco-plate" style="position:absolute; inset:-8px -8px 12px 12px; border:1px solid #2b2f34; border-radius:22px; transform:rotate(2deg);"></div>
+          <!-- glass frame -->
+          <div style="position:relative; border-radius:20px; overflow:hidden; border:1px solid #33363c; box-shadow:0 40px 80px -30px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.06);">
+            <div style="position:absolute; inset:0; background:linear-gradient(180deg,rgba(146,129,247,.10),transparent 45%,rgba(0,0,0,.30)); z-index:2; mix-blend-mode:soft-light;"></div>
+            <div style="position:absolute; inset:0; z-index:3; box-shadow:inset 0 -60px 60px -30px rgba(0,0,0,.8);"></div>
+            <img src="assets/portrait.png" alt="Даниэл" style="display:block; width:100%; height:454px; object-fit:cover; object-position:center 8%; filter:contrast(1.03) brightness(1.02);">
+          </div>
+          <!-- floating mono chips -->
+          <div class="deco-chip" style="position:absolute; top:22px; left:-58px; font-family:'Geist Mono',monospace; font-size:11px; color:#eef0f1; padding:8px 12px; border:1px solid #43484e; border-radius:9px; background:rgba(10,11,13,.92); backdrop-filter:blur(10px); box-shadow:0 12px 34px -10px #000;">React · TS</div>
+          <div class="deco-chip" style="position:absolute; bottom:56px; right:-52px; font-family:'Geist Mono',monospace; font-size:11px; color:#c9bcff; padding:8px 12px; border:1px solid #4a4570; border-radius:9px; background:rgba(22,19,42,.92); backdrop-filter:blur(10px); box-shadow:0 12px 34px -10px #000;">Next.js</div>
+          <div class="deco-chip" style="position:absolute; bottom:-16px; left:28px; z-index:6; font-family:'Geist Mono',monospace; font-size:11px; color:#eef0f1; padding:8px 12px; border:1px solid #43484e; border-radius:9px; background:rgba(10,11,13,.92); backdrop-filter:blur(10px); box-shadow:0 12px 34px -10px #000;">production UI</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TECH MARQUEE ============ -->
+  <div style="position:relative; border-top:1px solid #17191c; border-bottom:1px solid #17191c; padding:20px 0; overflow:hidden; background:linear-gradient(180deg,#050506,#000);">
+    <div class="marquee-track" style="display:flex; gap:0; width:max-content; animation:dsMarquee 34s linear infinite;">
+      <div style="display:flex; gap:44px; padding-right:44px; font-family:'Geist Mono',monospace; font-size:13px; color:#6b6f72; letter-spacing:.02em; align-items:center;">
+        {{ techLine }}
+      </div>
+      <div style="display:flex; gap:44px; padding-right:44px; font-family:'Geist Mono',monospace; font-size:13px; color:#6b6f72; letter-spacing:.02em; align-items:center;" aria-hidden="true">
+        {{ techLine }}
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SELECTED WORK ============ -->
+  <section id="work" class="work-sec sect" style="position:relative; padding:110px 40px 60px; max-width:1240px; margin:0 auto;">
+    <div data-reveal="" style="opacity:0; transform:translateY(20px); transition:all .8s cubic-bezier(.2,.7,.3,1); display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:64px; flex-wrap:wrap; gap:20px;">
+      <div>
+        <div style="font-family:'Geist Mono',monospace; font-size:12.5px; letter-spacing:.13em; color:#9281f7; text-transform:uppercase; margin-bottom:16px;">01 — SELECTED WORK</div>
+        <h2 style="margin:0; font-family:'Geist',system-ui,sans-serif; font-weight:600; letter-spacing:-.03em; font-size:clamp(38px,4.6vw,60px); line-height:1.02; letter-spacing:-.01em; color:#ffffff;">Избранные проекты</h2>
+      </div>
+      <p style="margin:0; max-width:360px; font-size:16px; line-height:1.6; color:#a1a4a5; font-weight:300;">Проекты приватные, поэтому показываю только безопасное описание: роль, стек, интерфейсные задачи и технические решения.</p>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:26px;">
+
+      <!-- Project 01 -->
+      <article data-reveal="" style="opacity:0; transform:translateY(24px); transition:all .8s cubic-bezier(.2,.7,.3,1); border:1px solid #1c1f22; border-radius:20px; overflow:hidden; background:linear-gradient(180deg,#0a0b0c,#050506);" style-hover="border-color:#2f3339">
+        <div class="proj-grid" style="display:grid; grid-template-columns:.92fr 1.08fr; gap:0; align-items:stretch;">
+          <div class="proj-text" style="padding:38px 34px; display:flex; flex-direction:column; border-right:1px solid #17191c;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px;">
+              <span style="font-family:'Geist Mono',monospace; font-size:11.5px; letter-spacing:.1em; color:#7c8084; text-transform:uppercase;">01 · Клиентский сайт + админка</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.1em; color:#baa7ff; text-transform:uppercase; padding:5px 10px; border:1px solid #33305a; border-radius:100px; background:rgba(146,129,247,.06); white-space:nowrap;"><span style="width:5px; height:5px; border-radius:50%; background:#9281f7; box-shadow:0 0 8px #9281f7;"></span>Private</span>
+            </div>
+            <h3 style="margin:0 0 22px; font-size:26px; font-weight:500; letter-spacing:-.02em; color:#ffffff; line-height:1.12;">Система заказов для ресторана</h3>
+            <div style="display:flex; flex-direction:column; gap:15px; border-top:1px solid #17191c; padding-top:20px;">
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#6b6f72; text-transform:uppercase;">Роль</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Frontend — вёрстка и клиентская логика</span></div>
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#6b6f72; text-transform:uppercase;">Задачи</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Меню, корзина, оформление заказа, экран отчётов</span></div>
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#9281f7; text-transform:uppercase;">Сложно</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Синхронизировать состояние корзины между сайтом и админкой</span></div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; padding-top:26px;">
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">Next.js</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">TypeScript</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">Tailwind</span>
+            </div>
+          </div>
+          <div class="proj-media" style="position:relative; padding:30px; display:flex; background:radial-gradient(ellipse at 70% 0%,rgba(146,129,247,.05),transparent 60%);">
+            <div style="width:100%; align-self:stretch; border:1px solid #1c1f22; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,#0a0b0c,#060708); display:flex; flex-direction:column;">
+              <div style="display:flex; align-items:center; gap:7px; padding:13px 16px; border-bottom:1px solid #17191c;"><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="margin-left:6px; font-family:'Geist Mono',monospace; font-size:10.5px; color:#6b6f72;">order-flow.ts</span><span style="margin-left:auto; font-family:'Geist Mono',monospace; font-size:9.5px; letter-spacing:.08em; color:#3f4348; text-transform:uppercase;">schema</span></div>
+              <div style="flex:1; padding:26px 28px; display:flex; flex-direction:column; justify-content:center;">
+                <span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.08em; color:#6b6f72; text-transform:uppercase; margin-bottom:18px;">// поток заказа</span>
+                <div style="display:flex; gap:14px;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:11px; height:11px; border-radius:50%; border:1px solid #3a3f45; background:#0a0b0c; flex:none;"></span><span style="width:1px; flex:1; min-height:16px; background:#23262a;"></span></div><div style="padding-bottom:12px;"><div style="font-size:14px; color:#e6e8e9;">Меню</div><div style="font-family:'Geist Mono',monospace; font-size:11px; color:#6b6f72; margin-top:3px;">каталог блюд</div></div></div>
+                <div style="display:flex; gap:14px;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:11px; height:11px; border-radius:50%; border:1px solid #3a3f45; background:#0a0b0c; flex:none;"></span><span style="width:1px; flex:1; min-height:16px; background:#23262a;"></span></div><div style="padding-bottom:12px;"><div style="font-size:14px; color:#e6e8e9;">Корзина</div><div style="font-family:'Geist Mono',monospace; font-size:11px; color:#6b6f72; margin-top:3px;">состояние на клиенте</div></div></div>
+                <div style="display:flex; gap:14px;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:11px; height:11px; border-radius:50%; border:1px solid #3a3f45; background:#0a0b0c; flex:none;"></span><span style="width:1px; flex:1; min-height:16px; background:#23262a;"></span></div><div style="padding-bottom:12px;"><div style="font-size:14px; color:#e6e8e9;">Оформление</div><div style="font-family:'Geist Mono',monospace; font-size:11px; color:#6b6f72; margin-top:3px;">форма + валидация</div></div></div>
+                <div style="display:flex; gap:14px;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:11px; height:11px; border-radius:50%; border:1px solid #3a3f45; background:#0a0b0c; flex:none;"></span><span style="width:1px; flex:1; min-height:16px; background:#23262a;"></span></div><div style="padding-bottom:12px;"><div style="font-size:14px; color:#e6e8e9;">Кухня</div><div style="font-family:'Geist Mono',monospace; font-size:11px; color:#6b6f72; margin-top:3px;">экран в админке</div></div></div>
+                <div style="display:flex; gap:14px;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:11px; height:11px; border-radius:50%; background:#9281f7; box-shadow:0 0 10px rgba(146,129,247,.7); flex:none;"></span></div><div><div style="font-size:14px; color:#ffffff;">Готово</div><div style="font-family:'Geist Mono',monospace; font-size:11px; color:#baa7ff; margin-top:3px;">статус заказа</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 02 -->
+      <article data-reveal="" style="opacity:0; transform:translateY(24px); transition:all .8s cubic-bezier(.2,.7,.3,1); border:1px solid #1c1f22; border-radius:20px; overflow:hidden; background:linear-gradient(180deg,#0a0b0c,#050506);" style-hover="border-color:#2f3339">
+        <div class="proj-grid" style="display:grid; grid-template-columns:1.08fr .92fr; gap:0; align-items:stretch;">
+          <div class="proj-media" style="position:relative; padding:30px; display:flex; border-right:1px solid #17191c; background:radial-gradient(ellipse at 30% 0%,rgba(146,129,247,.05),transparent 60%);">
+            <div style="width:100%; align-self:stretch; border:1px solid #1c1f22; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,#0a0b0c,#060708); display:flex; flex-direction:column;">
+              <div style="display:flex; align-items:center; gap:7px; padding:13px 16px; border-bottom:1px solid #17191c;"><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="margin-left:6px; font-family:'Geist Mono',monospace; font-size:10.5px; color:#6b6f72;">task.machine.ts</span><span style="margin-left:auto; font-family:'Geist Mono',monospace; font-size:9.5px; letter-spacing:.08em; color:#3f4348; text-transform:uppercase;">state</span></div>
+              <div style="flex:1; padding:26px 28px; display:flex; flex-direction:column; justify-content:center;">
+                <span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.08em; color:#6b6f72; text-transform:uppercase; margin-bottom:18px;">// жизненный цикл задачи</span>
+                <div style="display:flex; gap:14px; align-items:flex-start;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:9px; height:9px; border-radius:50%; border:1px solid #3a3f45; background:#0a0b0c; margin-top:9px; flex:none;"></span><span style="width:1px; flex:1; min-height:12px; background:#23262a;"></span></div><div style="padding-bottom:11px;"><span style="display:inline-flex; font-family:'Geist Mono',monospace; font-size:12px; color:#c6c9cb; padding:6px 12px; border:1px solid #23262a; border-radius:8px; background:rgba(255,255,255,.02);">NEED_TO_DO</span></div></div>
+                <div style="display:flex; gap:14px; align-items:flex-start;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:9px; height:9px; border-radius:50%; background:#9281f7; box-shadow:0 0 9px rgba(146,129,247,.7); margin-top:9px; flex:none;"></span><span style="width:1px; flex:1; min-height:12px; background:#23262a;"></span></div><div style="padding-bottom:11px; display:flex; align-items:center; gap:10px;"><span style="display:inline-flex; font-family:'Geist Mono',monospace; font-size:12px; color:#c9bcff; padding:6px 12px; border:1px solid #4a4570; border-radius:8px; background:rgba(146,129,247,.10);">IN_PROGRESS</span><span style="font-family:'Geist Mono',monospace; font-size:10px; color:#6b6f72;">← текущий</span></div></div>
+                <div style="display:flex; gap:14px; align-items:flex-start;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:9px; height:9px; border-radius:50%; border:1px solid #3a3f45; background:#0a0b0c; margin-top:9px; flex:none;"></span><span style="width:1px; flex:1; min-height:12px; background:#23262a;"></span></div><div style="padding-bottom:11px;"><span style="display:inline-flex; font-family:'Geist Mono',monospace; font-size:12px; color:#c6c9cb; padding:6px 12px; border:1px solid #23262a; border-radius:8px; background:rgba(255,255,255,.02);">ON_REVIEW</span></div></div>
+                <div style="display:flex; gap:14px; align-items:flex-start;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:9px; height:9px; border-radius:50%; border:1px solid #3a3f45; background:#0a0b0c; margin-top:9px; flex:none;"></span><span style="width:1px; flex:1; min-height:12px; background:#23262a;"></span></div><div style="padding-bottom:11px;"><span style="display:inline-flex; font-family:'Geist Mono',monospace; font-size:12px; color:#c6c9cb; padding:6px 12px; border:1px solid #23262a; border-radius:8px; background:rgba(255,255,255,.02);">ON_REVISION</span></div></div>
+                <div style="display:flex; gap:14px; align-items:flex-start;"><div style="display:flex; flex-direction:column; align-items:center;"><span style="width:9px; height:9px; border-radius:50%; background:#9281f7; box-shadow:0 0 9px rgba(146,129,247,.7); margin-top:9px; flex:none;"></span></div><div><span style="display:inline-flex; font-family:'Geist Mono',monospace; font-size:12px; color:#e6e8e9; padding:6px 12px; border:1px solid #33305a; border-radius:8px; background:rgba(255,255,255,.02);">APPROVED</span></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="proj-text" style="padding:38px 34px; display:flex; flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px;">
+              <span style="font-family:'Geist Mono',monospace; font-size:11.5px; letter-spacing:.1em; color:#7c8084; text-transform:uppercase;">02 · SaaS · дашборд задач</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.1em; color:#baa7ff; text-transform:uppercase; padding:5px 10px; border:1px solid #33305a; border-radius:100px; background:rgba(146,129,247,.06); white-space:nowrap;"><span style="width:5px; height:5px; border-radius:50%; background:#9281f7; box-shadow:0 0 8px #9281f7;"></span>Private</span>
+            </div>
+            <h3 style="margin:0 0 22px; font-size:26px; font-weight:500; letter-spacing:-.02em; color:#ffffff; line-height:1.12;">Task Management Dashboard</h3>
+            <div style="display:flex; flex-direction:column; gap:15px; border-top:1px solid #17191c; padding-top:20px;">
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#6b6f72; text-transform:uppercase;">Роль</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Frontend — интерфейс дашборда</span></div>
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#6b6f72; text-transform:uppercase;">Задачи</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Таблицы, фильтры, модальные формы, статусы</span></div>
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#9281f7; text-transform:uppercase;">Сложно</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Отрисовать жизненный цикл статуса без рассинхрона с бэкендом</span></div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; padding-top:26px;">
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">React</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">TypeScript</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">State machine</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 03 -->
+      <article data-reveal="" style="opacity:0; transform:translateY(24px); transition:all .8s cubic-bezier(.2,.7,.3,1); border:1px solid #1c1f22; border-radius:20px; overflow:hidden; background:linear-gradient(180deg,#0a0b0c,#050506);" style-hover="border-color:#2f3339">
+        <div class="proj-grid" style="display:grid; grid-template-columns:.92fr 1.08fr; gap:0; align-items:stretch;">
+          <div class="proj-text" style="padding:38px 34px; display:flex; flex-direction:column; border-right:1px solid #17191c;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px;">
+              <span style="font-family:'Geist Mono',monospace; font-size:11.5px; letter-spacing:.1em; color:#7c8084; text-transform:uppercase;">03 · B2B · каталог</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.1em; color:#baa7ff; text-transform:uppercase; padding:5px 10px; border:1px solid #33305a; border-radius:100px; background:rgba(146,129,247,.06); white-space:nowrap;"><span style="width:5px; height:5px; border-radius:50%; background:#9281f7; box-shadow:0 0 8px #9281f7;"></span>Private</span>
+            </div>
+            <h3 style="margin:0 0 22px; font-size:26px; font-weight:500; letter-spacing:-.02em; color:#ffffff; line-height:1.12;">B2B каталог товаров</h3>
+            <div style="display:flex; flex-direction:column; gap:15px; border-top:1px solid #17191c; padding-top:20px;">
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#6b6f72; text-transform:uppercase;">Роль</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Frontend — структура и навигация</span></div>
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#6b6f72; text-transform:uppercase;">Задачи</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Категории, карточки товаров, навигация, адаптив</span></div>
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#9281f7; text-transform:uppercase;">Сложно</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Держать навигацию понятной на большом объёме категорий</span></div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; padding-top:26px;">
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">React</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">TypeScript</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">SCSS</span>
+            </div>
+          </div>
+          <div class="proj-media" style="position:relative; padding:30px; display:flex; background:radial-gradient(ellipse at 70% 0%,rgba(146,129,247,.05),transparent 60%);">
+            <div style="width:100%; align-self:stretch; border:1px solid #1c1f22; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,#0a0b0c,#060708); display:flex; flex-direction:column;">
+              <div style="display:flex; align-items:center; gap:7px; padding:13px 16px; border-bottom:1px solid #17191c;"><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="margin-left:6px; font-family:'Geist Mono',monospace; font-size:10.5px; color:#6b6f72;">catalog.tree</span><span style="margin-left:auto; font-family:'Geist Mono',monospace; font-size:9.5px; letter-spacing:.08em; color:#3f4348; text-transform:uppercase;">nav</span></div>
+              <div style="flex:1; padding:26px 28px; display:flex; flex-direction:column; justify-content:center;">
+                <span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.08em; color:#6b6f72; text-transform:uppercase; margin-bottom:16px;">// структура каталога</span>
+                <div style="font-family:'Geist Mono',monospace; font-size:12.5px; line-height:2; color:#c6c9cb;">
+                  <div><span style="color:#baa7ff;">catalog/</span></div>
+                  <div><span style="color:#3f4348;">├─</span> Категории<span style="color:#3f4348;">/</span></div>
+                  <div><span style="color:#3f4348;">│&nbsp;&nbsp;├─</span> Электроника</div>
+                  <div><span style="color:#3f4348;">│&nbsp;&nbsp;├─</span> Инструменты</div>
+                  <div><span style="color:#3f4348;">│&nbsp;&nbsp;└─</span> Расходники</div>
+                  <div><span style="color:#3f4348;">├─</span> Бренды<span style="color:#3f4348;">/</span></div>
+                  <div><span style="color:#3f4348;">│&nbsp;&nbsp;└─</span> по производителям</div>
+                  <div><span style="color:#3f4348;">└─</span> Поиск и фильтры</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 04 -->
+      <article data-reveal="" style="opacity:0; transform:translateY(24px); transition:all .8s cubic-bezier(.2,.7,.3,1); border:1px solid #1c1f22; border-radius:20px; overflow:hidden; background:linear-gradient(180deg,#0a0b0c,#050506);" style-hover="border-color:#2f3339">
+        <div class="proj-grid" style="display:grid; grid-template-columns:1.08fr .92fr; gap:0; align-items:stretch;">
+          <div class="proj-media" style="position:relative; padding:30px; display:flex; border-right:1px solid #17191c; background:radial-gradient(ellipse at 30% 0%,rgba(146,129,247,.05),transparent 60%);">
+            <div style="width:100%; align-self:stretch; border:1px solid #1c1f22; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,#0a0b0c,#060708); display:flex; flex-direction:column;">
+              <div style="display:flex; align-items:center; gap:7px; padding:13px 16px; border-bottom:1px solid #17191c;"><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="margin-left:6px; font-family:'Geist Mono',monospace; font-size:10.5px; color:#6b6f72;">content-board.tsx</span><span style="margin-left:auto; font-family:'Geist Mono',monospace; font-size:9.5px; letter-spacing:.08em; color:#3f4348; text-transform:uppercase;">board</span></div>
+              <div style="flex:1; padding:22px; display:flex; flex-direction:column; justify-content:center;">
+                <span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.08em; color:#6b6f72; text-transform:uppercase; margin-bottom:16px;">// доска контента</span>
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                  <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;"><span style="width:6px; height:6px; border-radius:50%; background:#3a3f45; flex:none;"></span><span style="font-family:'Geist Mono',monospace; font-size:9.5px; letter-spacing:.04em; color:#7c8084; text-transform:uppercase;">Черновик</span></div>
+                    <div style="border:1px solid #23262a; border-radius:7px; padding:9px; background:rgba(255,255,255,.015); display:flex; flex-direction:column; gap:6px;"><div style="height:5px; width:82%; background:#2b2f34; border-radius:2px;"></div><div style="height:5px; width:55%; background:#23262a; border-radius:2px;"></div></div>
+                    <div style="border:1px solid #23262a; border-radius:7px; padding:9px; background:rgba(255,255,255,.015); display:flex; flex-direction:column; gap:6px;"><div style="height:5px; width:70%; background:#2b2f34; border-radius:2px;"></div><div style="height:5px; width:48%; background:#23262a; border-radius:2px;"></div></div>
+                  </div>
+                  <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;"><span style="width:6px; height:6px; border-radius:50%; background:#9281f7; box-shadow:0 0 7px rgba(146,129,247,.7); flex:none;"></span><span style="font-family:'Geist Mono',monospace; font-size:9.5px; letter-spacing:.04em; color:#baa7ff; text-transform:uppercase;">На ревью</span></div>
+                    <div style="border:1px solid #4a4570; border-radius:7px; padding:9px; background:rgba(146,129,247,.08); display:flex; flex-direction:column; gap:6px;"><div style="height:5px; width:82%; background:#6a5fb0; border-radius:2px;"></div><div style="height:5px; width:60%; background:#3a3560; border-radius:2px;"></div></div>
+                    <div style="border:1px solid #23262a; border-radius:7px; padding:9px; background:rgba(255,255,255,.015); display:flex; flex-direction:column; gap:6px;"><div style="height:5px; width:74%; background:#2b2f34; border-radius:2px;"></div><div style="height:5px; width:52%; background:#23262a; border-radius:2px;"></div></div>
+                  </div>
+                  <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;"><span style="width:6px; height:6px; border-radius:50%; background:#5b8f6f; flex:none;"></span><span style="font-family:'Geist Mono',monospace; font-size:9.5px; letter-spacing:.04em; color:#7c8084; text-transform:uppercase;">Опубл.</span></div>
+                    <div style="border:1px solid #23262a; border-radius:7px; padding:9px; background:rgba(255,255,255,.015); display:flex; flex-direction:column; gap:6px;"><div style="height:5px; width:78%; background:#2b2f34; border-radius:2px;"></div><div style="height:5px; width:50%; background:#23262a; border-radius:2px;"></div></div>
+                    <div style="border:1px solid #23262a; border-radius:7px; padding:9px; background:rgba(255,255,255,.015); display:flex; flex-direction:column; gap:6px;"><div style="height:5px; width:66%; background:#2b2f34; border-radius:2px;"></div><div style="height:5px; width:44%; background:#23262a; border-radius:2px;"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proj-text" style="padding:38px 34px; display:flex; flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px;">
+              <span style="font-family:'Geist Mono',monospace; font-size:11.5px; letter-spacing:.1em; color:#7c8084; text-transform:uppercase;">04 · Внутренняя CMS / dashboard</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.1em; color:#baa7ff; text-transform:uppercase; padding:5px 10px; border:1px solid #33305a; border-radius:100px; background:rgba(146,129,247,.06); white-space:nowrap;"><span style="width:5px; height:5px; border-radius:50%; background:#9281f7; box-shadow:0 0 8px #9281f7;"></span>Private</span>
+            </div>
+            <h3 style="margin:0 0 22px; font-size:26px; font-weight:500; letter-spacing:-.02em; color:#ffffff; line-height:1.12;">Платформа управления контентом</h3>
+            <div style="display:flex; flex-direction:column; gap:15px; border-top:1px solid #17191c; padding-top:20px;">
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#6b6f72; text-transform:uppercase;">Роль</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Frontend — dashboard, workflow-экраны, UI-состояния</span></div>
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#6b6f72; text-transform:uppercase;">Задачи</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Интерфейсы для карточек, контента, статусов, календаря и рабочих процессов команды</span></div>
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#9281f7; text-transform:uppercase;">Интересно</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Собрать плотный интерфейс с большим объёмом данных так, чтобы он оставался читаемым в ежедневной работе</span></div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; padding-top:26px;">
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">React</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">TypeScript</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">Dashboard UI</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">Kanban</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">Charts</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">Content workflow</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 05 -->
+      <article data-reveal="" style="opacity:0; transform:translateY(24px); transition:all .8s cubic-bezier(.2,.7,.3,1); border:1px solid #1c1f22; border-radius:20px; overflow:hidden; background:linear-gradient(180deg,#0a0b0c,#050506);" style-hover="border-color:#2f3339">
+        <div class="proj-grid" style="display:grid; grid-template-columns:.92fr 1.08fr; gap:0; align-items:stretch;">
+          <div class="proj-text" style="padding:38px 34px; display:flex; flex-direction:column; border-right:1px solid #17191c;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px;">
+              <span style="font-family:'Geist Mono',monospace; font-size:11.5px; letter-spacing:.1em; color:#7c8084; text-transform:uppercase;">05 · Публичный сайт / интерактивный тест</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.1em; color:#baa7ff; text-transform:uppercase; padding:5px 10px; border:1px solid #33305a; border-radius:100px; background:rgba(146,129,247,.06); white-space:nowrap;"><span style="width:5px; height:5px; border-radius:50%; background:#9281f7; box-shadow:0 0 8px #9281f7;"></span>Private</span>
+            </div>
+            <h3 style="margin:0 0 22px; font-size:26px; font-weight:500; letter-spacing:-.02em; color:#ffffff; line-height:1.12;">Сайт для школы английского</h3>
+            <div style="display:flex; flex-direction:column; gap:15px; border-top:1px solid #17191c; padding-top:20px;">
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#6b6f72; text-transform:uppercase;">Роль</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Frontend — landing, адаптив, test flow, CMS</span></div>
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#6b6f72; text-transform:uppercase;">Задачи</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Публичные страницы школы, адаптив и интерактивный тест — вопросы, варианты и контент из CMS</span></div>
+              <div style="display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:baseline;"><span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.09em; color:#9281f7; text-transform:uppercase;">Интересно</span><span style="font-size:14.5px; line-height:1.5; color:#c6c9cb; font-weight:300;">Сделать тест как полноценный сценарий: таймер, круговой индикатор времени, проверка ответов, итоговый процент и форма заявки</span></div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; padding-top:26px;">
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">Next.js</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">TypeScript</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">Tailwind</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">CMS</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">Quiz flow</span>
+              <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#b0b3b5; padding:5px 11px; border:1px solid #26292d; border-radius:7px;">Timer UI</span>
+            </div>
+          </div>
+          <div class="proj-media" style="position:relative; padding:30px; display:flex; background:radial-gradient(ellipse at 70% 0%,rgba(146,129,247,.05),transparent 60%);">
+            <div style="width:100%; align-self:stretch; border:1px solid #1c1f22; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,#0a0b0c,#060708); display:flex; flex-direction:column;">
+              <div style="display:flex; align-items:center; gap:7px; padding:13px 16px; border-bottom:1px solid #17191c;"><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="width:9px;height:9px;border-radius:50%;background:#2b2f34;"></span><span style="margin-left:6px; font-family:'Geist Mono',monospace; font-size:10.5px; color:#6b6f72;">quiz.flow.tsx</span><span style="margin-left:auto; font-family:'Geist Mono',monospace; font-size:9.5px; letter-spacing:.08em; color:#3f4348; text-transform:uppercase;">test</span></div>
+              <div style="flex:1; padding:26px; display:flex; flex-direction:column; justify-content:center;">
+                <span style="font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:.08em; color:#6b6f72; text-transform:uppercase; margin-bottom:20px;">// сценарий теста</span>
+                <div style="display:flex; align-items:center; gap:18px; margin-bottom:22px;">
+                  <div style="position:relative; width:70px; height:70px; flex:none;">
+                    <div style="width:70px; height:70px; border-radius:50%; background:conic-gradient(#9281f7 0 68%, #23262a 0); -webkit-mask:radial-gradient(circle at center, transparent 59%, #000 60%); mask:radial-gradient(circle at center, transparent 59%, #000 60%);"></div>
+                    <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Geist Mono',monospace; font-size:13px; color:#eef0f1;">0:12</div>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:4px;">
+                    <div style="font-size:13.5px; color:#e6e8e9;">Таймер на вопрос</div>
+                    <div style="font-family:'Geist Mono',monospace; font-size:11px; color:#6b6f72;">круговой индикатор времени</div>
+                  </div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">
+                  <div style="display:flex; align-items:center; gap:10px; font-family:'Geist Mono',monospace; font-size:12px; color:#7cc79a; padding:9px 12px; border:1px solid #2c3b31; border-radius:8px; background:rgba(90,175,120,.07);"><span style="font-size:12px; flex:none;">✓</span> Верный ответ</div>
+                  <div style="display:flex; align-items:center; gap:10px; font-family:'Geist Mono',monospace; font-size:12px; color:#c6c9cb; padding:9px 12px; border:1px solid #23262a; border-radius:8px; background:rgba(255,255,255,.02);"><span style="width:12px; height:12px; border:1px solid #3a3f45; border-radius:4px; flex:none;"></span> Вариант ответа</div>
+                  <div style="display:flex; align-items:center; gap:10px; font-family:'Geist Mono',monospace; font-size:12px; color:#cf9393; padding:9px 12px; border:1px solid #3b2c2c; border-radius:8px; background:rgba(175,90,90,.06);"><span style="font-size:12px; flex:none;">✕</span> Неверный — отмечен</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <span style="font-family:'Geist Mono',monospace; font-size:9.5px; letter-spacing:.06em; color:#6b6f72; text-transform:uppercase;">результат</span>
+                  <div style="flex:1; height:7px; border-radius:4px; background:#1f2226; overflow:hidden;"><div style="width:72%; height:100%; background:linear-gradient(90deg,#9281f7,#baa7ff); border-radius:4px;"></div></div>
+                  <span style="font-family:'Geist Mono',monospace; font-size:12px; color:#eef0f1;">72%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ EXPERTISE ============ -->
+  <section id="expertise" class="sect" style="position:relative; padding:100px 40px; max-width:1240px; margin:0 auto;">
+    <div data-reveal="" style="opacity:0; transform:translateY(20px); transition:all .8s cubic-bezier(.2,.7,.3,1); margin-bottom:56px;">
+      <div style="font-family:'Geist Mono',monospace; font-size:12.5px; letter-spacing:.13em; color:#9281f7; text-transform:uppercase; margin-bottom:16px;">02 — FRONTEND EXPERTISE</div>
+      <h2 style="margin:0; font-family:'Geist',system-ui,sans-serif; font-weight:600; letter-spacing:-.03em; font-size:clamp(38px,4.6vw,60px); line-height:1.02; letter-spacing:-.01em; color:#ffffff; max-width:720px;">Инструменты, с которыми<br>работаю каждый день.</h2>
+    </div>
+
+    <div data-reveal="" class="exp-grid" style="opacity:0; transform:translateY(20px); transition:all .8s cubic-bezier(.2,.7,.3,1); display:grid; grid-template-columns:repeat(12,1fr); gap:18px;">
+      <!-- Core frontend -->
+      <div style="grid-column:span 7; border:1px solid #1c1f22; border-radius:18px; padding:34px; background:linear-gradient(160deg,rgba(146,129,247,.05),transparent 55%),#08090a;">
+        <div style="font-family:'Geist Mono',monospace; font-size:10.5px; letter-spacing:.1em; color:#baa7ff; text-transform:uppercase; margin-bottom:22px;">CORE · ежедневно</div>
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+          {{ coreChips }}
+        </div>
+        <p style="margin:26px 0 0; font-size:16px; line-height:1.6; color:#a7abac; font-weight:300; max-width:440px;">Основной инструмент — React и TypeScript. Пишу типизированные компоненты, работаю с состояниями и адаптивной вёрсткой, делаю SSR/ISR на Next.js.</p>
+      </div>
+      <!-- What I build in interfaces -->
+      <div style="grid-column:span 5; border:1px solid #1c1f22; border-radius:18px; padding:34px; background:#08090a;">
+        <div style="font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.1em; color:#6b6f72; text-transform:uppercase; margin-bottom:22px;">В интерфейсах делаю</div>
+        <div style="display:flex; flex-direction:column; gap:0;">
+          {{ patternRows }}
+        </div>
+      </div>
+      <!-- Backend (soft mention) -->
+      <div style="grid-column:span 5; border:1px solid #1c1f22; border-radius:18px; padding:34px; background:#08090a; display:flex; flex-direction:column; justify-content:center;">
+        <div style="font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.1em; color:#6b6f72; text-transform:uppercase; margin-bottom:16px;">Backend</div>
+        <p style="margin:0; font-size:16px; line-height:1.6; color:#a7abac; font-weight:300;">Понимаю backend-часть на уровне, который помогает работать с API и логикой продукта — как устроены запросы, данные и интеграции.</p>
+      </div>
+      <!-- Adaptability -->
+      <div style="grid-column:span 7; border:1px solid #1c1f22; border-radius:18px; padding:34px; background:linear-gradient(160deg,rgba(146,129,247,.04),transparent 55%),#08090a; display:flex; flex-direction:column; justify-content:center;">
+        <div style="font-family:'Geist Mono',monospace; font-size:10.5px; letter-spacing:.1em; color:#baa7ff; text-transform:uppercase; margin-bottom:16px;">АДАПТИВНОСТЬ</div>
+        <h3 style="margin:0 0 12px; font-size:22px; font-weight:500; letter-spacing:-.01em; color:#ffffff;">Быстро вхожу в незнакомый код</h3>
+        <p style="margin:0; font-size:16px; line-height:1.6; color:#a7abac; font-weight:300; max-width:520px;">Читаю документацию быстро, разбираюсь в чужом коде и работаю аккуратно внутри существующих систем, не ломая то, что уже написано. Спокойно подстраиваюсь под инструменты и процессы команды.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AI WORKFLOW ============ -->
+  <section id="ai" class="sect" style="position:relative; padding:60px 40px 100px;">
+    <div style="max-width:1240px; margin:0 auto;">
+      <div data-reveal="" style="opacity:0; transform:translateY(20px); transition:all .8s cubic-bezier(.2,.7,.3,1); border:1px solid #23262a; border-radius:24px; overflow:hidden; position:relative; background:linear-gradient(180deg,#0b0a12,#050506);">
+        <!-- line accents -->
+        <div style="position:absolute; inset:0; background-image:linear-gradient(90deg,rgba(146,129,247,.08) 1px,transparent 1px); background-size:80px 100%; pointer-events:none; opacity:.6;"></div>
+        <div style="position:absolute; top:-40%; right:-5%; width:520px; height:520px; background:radial-gradient(circle,rgba(146,129,247,.14),transparent 62%); filter:blur(20px); pointer-events:none;"></div>
+
+        <div class="ai-grid" style="position:relative; display:grid; grid-template-columns:1fr 1fr; gap:0;">
+          <div class="ai-col" style="padding:52px 46px;">
+            <div style="font-family:'Geist Mono',monospace; font-size:12.5px; letter-spacing:.13em; color:#9281f7; text-transform:uppercase; margin-bottom:20px;">03 — AI-ASSISTED ENGINEERING</div>
+            <h2 style="margin:0 0 22px; font-family:'Geist',system-ui,sans-serif; font-weight:600; font-size:clamp(30px,3.6vw,44px); line-height:1.1; letter-spacing:-.03em; color:#ffffff;">Использую AI как<br>инструмент, а не<br>как <span style="color:#baa7ff;">замену мышлению</span>.</h2>
+            <p style="margin:0; font-size:16px; line-height:1.68; color:#a7abac; font-weight:300; max-width:440px;">Использую Claude Code как рабочий инструмент: для анализа кода, декомпозиции задач, подготовки контекста и проверки решений. Это не простые промпты, а работа с контекстом, техническими ограничениями и пошаговой проверкой результата. Финальные решения, качество и ответственность остаются за мной.</p>
+          </div>
+          <div class="ai-col" style="padding:52px 46px; border-left:1px solid #1c1f22; display:flex; flex-direction:column; gap:18px; justify-content:center;">
+            {{ aiRows }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section class="sect" style="position:relative; padding:40px 40px 100px; max-width:1240px; margin:0 auto;">
+    <div data-reveal="" style="opacity:0; transform:translateY(20px); transition:all .8s cubic-bezier(.2,.7,.3,1); margin-bottom:48px;">
+      <div style="font-family:'Geist Mono',monospace; font-size:12.5px; letter-spacing:.13em; color:#9281f7; text-transform:uppercase; margin-bottom:16px;">04 — ПОДХОД</div>
+      <h2 style="margin:0; font-family:'Geist',system-ui,sans-serif; font-weight:600; letter-spacing:-.03em; font-size:clamp(38px,4.6vw,60px); line-height:1.02; letter-spacing:-.01em; color:#ffffff;">Как я работаю</h2>
+    </div>
+    <div data-reveal="" class="process-grid" style="opacity:0; transform:translateY(20px); transition:all .8s cubic-bezier(.2,.7,.3,1); display:grid; grid-template-columns:repeat(4,1fr); gap:18px;">
+      {{ processCards }}
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" class="sect" style="position:relative; padding:60px 40px 100px; max-width:1240px; margin:0 auto;">
+    <div data-reveal="" class="about-grid" style="opacity:0; transform:translateY(20px); transition:all .8s cubic-bezier(.2,.7,.3,1); display:grid; grid-template-columns:.9fr 1.1fr; gap:56px; align-items:center;">
+      <div class="about-media" style="position:relative;">
+        <div style="position:absolute; inset:-14px 18px 18px -14px; border:1px solid #23262a; border-radius:22px; transform:rotate(-3deg);"></div>
+        <div style="position:relative; border-radius:18px; overflow:hidden; border:1px solid #33363c; box-shadow:0 40px 80px -30px rgba(0,0,0,.9);">
+          <div style="position:absolute; inset:0; background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.4)); z-index:2;"></div>
+          <img src="assets/portrait.png" alt="Даниэл Кубанычбеков" style="display:block; width:100%; height:420px; object-fit:cover; object-position:center 16%; filter:contrast(1.03) brightness(1.02);">
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Geist Mono',monospace; font-size:12.5px; letter-spacing:.13em; color:#9281f7; text-transform:uppercase; margin-bottom:18px;">05 — ОБО МНЕ</div>
+        <h2 style="margin:0 0 24px; font-family:'Geist',system-ui,sans-serif; font-weight:600; letter-spacing:-.03em; font-size:clamp(32px,3.8vw,48px); line-height:1.06; letter-spacing:-.01em; color:#ffffff;">Даниэл Кубанычбеков</h2>
+        <p style="margin:0 0 18px; font-size:16.5px; line-height:1.7; color:#a7abac; font-weight:300;">Фронтенд-разработчик из Бишкека. Последние 2,5 года постоянно в разработке: участвовал в 30+ проектах разного масштаба. Часть делал самостоятельно, в командах отвечал за фронтенд.</p>
+        <p style="margin:0 0 30px; font-size:16.5px; line-height:1.7; color:#a7abac; font-weight:300;">Люблю аккуратный код и понятные интерфейсы. Сейчас целенаправленно усиливаю инженерную гигиену — тесты и переиспользование компонентов.</p>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid #1c1f22; border-radius:14px; overflow:hidden;">
+          <div style="padding:22px 20px; border-right:1px solid #1c1f22;">
+            <div style="font-family:'Geist',sans-serif; font-weight:500; font-size:28px; color:#ffffff; line-height:1; letter-spacing:-.02em;">2,5</div>
+            <div style="font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.04em; color:#8a8e90; text-transform:uppercase; margin-top:9px;">года в разработке</div>
+          </div>
+          <div style="padding:22px 20px; border-right:1px solid #1c1f22;">
+            <div style="font-family:'Geist',sans-serif; font-weight:500; font-size:28px; color:#ffffff; line-height:1; letter-spacing:-.02em;">30<span style="color:#9281f7;">+</span></div>
+            <div style="font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.04em; color:#8a8e90; text-transform:uppercase; margin-top:9px;">проектов</div>
+          </div>
+          <div style="padding:22px 20px;">
+            <div style="font-family:'Geist',sans-serif; font-weight:500; font-size:28px; color:#ffffff; line-height:1; letter-spacing:-.02em;">10<span style="color:#9281f7;">+</span></div>
+            <div style="font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:.04em; color:#8a8e90; text-transform:uppercase; margin-top:9px;">в реальном использовании</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="sect" style="position:relative; padding:100px 40px 120px; overflow:hidden;">
+    <div style="position:absolute; inset:0; background-image:linear-gradient(rgba(35,38,42,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(35,38,42,.4) 1px,transparent 1px); background-size:64px 64px; mask-image:radial-gradient(ellipse 70% 80% at 50% 50%,#000,transparent 75%); -webkit-mask-image:radial-gradient(ellipse 70% 80% at 50% 50%,#000,transparent 75%); pointer-events:none;"></div>
+    <div style="position:absolute; bottom:-30%; left:50%; transform:translateX(-50%); width:700px; height:500px; background:radial-gradient(circle,rgba(146,129,247,.16),transparent 62%); filter:blur(30px); pointer-events:none;"></div>
+
+    <div data-reveal="" style="opacity:0; transform:translateY(20px); transition:all .8s cubic-bezier(.2,.7,.3,1); position:relative; max-width:760px; margin:0 auto; text-align:center;">
+      <div style="font-family:'Geist Mono',monospace; font-size:12.5px; letter-spacing:.13em; color:#9281f7; text-transform:uppercase; margin-bottom:22px;">06 — CONTACT</div>
+      <h2 style="margin:0 0 22px; font-family:'Geist',system-ui,sans-serif; font-weight:600; letter-spacing:-.03em; font-size:clamp(44px,6vw,84px); line-height:1; letter-spacing:-.02em; color:#ffffff;">Открыт к работе<br>и <span style="font-style:italic; color:#baa7ff;">интересным задачам</span></h2>
+      <p style="margin:0 0 44px; font-size:16px; line-height:1.6; color:#a1a4a5; font-weight:300; max-width:460px; margin-left:auto; margin-right:auto;">Ищу позицию фронтенд-разработчика. Напишите — отвечаю быстро.</p>
+
+      <div class="contact-btns" style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        {{ contactButtons }}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer sect" style="border-top:1px solid #17191c; padding:30px 40px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; max-width:1240px; margin:0 auto;">
+    <span style="font-family:'Geist Mono',monospace; font-size:13.5px; color:#82868a;">© 2026 · Даниэл Кубанычбеков</span>
+    <span style="font-family:'Geist Mono',monospace; font-size:13.5px; color:#82868a;">Frontend Developer · React / TypeScript / Next.js</span>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    // scroll reveal
+    const reveal = (el) => { el.style.opacity = '1'; el.style.transform = 'none'; };
+    const els = Array.from(document.querySelectorAll('[data-reveal]'));
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { reveal(e.target); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+      els.forEach(el => io.observe(el));
+      // fallback: anything already in viewport on load
+      requestAnimationFrame(() => {
+        els.forEach(el => { const r = el.getBoundingClientRect(); if (r.top < window.innerHeight) reveal(el); });
+      });
+      // safety net
+      setTimeout(() => els.forEach(reveal), 1400);
+    } else {
+      els.forEach(reveal);
+    }
+
+    // nav condense on scroll
+    const nav = this._nav;
+    const onScroll = () => {
+      if (!nav) return;
+      if (window.scrollY > 30) {
+        nav.style.background = 'rgba(0,0,0,.72)';
+        nav.style.backdropFilter = 'blur(16px)';
+        nav.style.borderBottom = '1px solid rgba(35,38,42,1)';
+        nav.style.padding = '13px 40px';
+      } else {
+        nav.style.background = 'rgba(0,0,0,0)';
+        nav.style.backdropFilter = 'blur(0px)';
+        nav.style.borderBottom = '1px solid rgba(35,38,42,0)';
+        nav.style.padding = '18px 40px';
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    this._onScroll = onScroll;
+  }
+  componentWillUnmount() {
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+  }
+
+  setDrawer = (el) => { this._drawer = el; };
+  setBurger = (el) => { this._burger = el; };
+  _menuOpen = false;
+  applyMenu() {
+    const d = this._drawer, b = this._burger;
+    const open = this._menuOpen;
+    if (d) {
+      d.style.transform = open ? 'translateY(0)' : 'translateY(-100%)';
+      d.style.opacity = open ? '1' : '0';
+      d.style.pointerEvents = open ? 'auto' : 'none';
+    }
+    if (b) {
+      const bars = b.children;
+      if (bars.length === 3) {
+        bars[0].style.top = open ? '5px' : '0px';
+        bars[0].style.transform = open ? 'rotate(45deg)' : 'none';
+        bars[1].style.opacity = open ? '0' : '1';
+        bars[2].style.top = '5px';
+        bars[2].style.transform = open ? 'rotate(-45deg)' : 'none';
+      }
+    }
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  toggleMenu = () => { this._menuOpen = !this._menuOpen; this.applyMenu(); };
+  closeMenu = () => { this._menuOpen = false; this.applyMenu(); };
+
+  chip(label, on) {
+    return React.createElement('span', { key: label, style: {
+      fontFamily: "'Geist Mono',monospace", fontSize: '12.5px',
+      color: on ? '#f0f0f0' : '#a1a4a5',
+      padding: '8px 14px', borderRadius: '9px',
+      border: '1px solid ' + (on ? '#3a3560' : '#23262a'),
+      background: on ? 'rgba(146,129,247,.10)' : 'rgba(255,255,255,.015)'
+    } }, label);
+  }
+
+  renderVals() {
+    const R = React.createElement;
+
+    const techItems = ['React','TypeScript','Next.js','Tailwind CSS','SCSS','Redux Toolkit','RTK Query','Zustand','Framer Motion','Vite','Axios','Git','GitHub','Figma','Responsive UI','Forms','API integration'];
+    const techLine = R('span', { style:{ display:'flex', gap:'44px', alignItems:'center' } },
+      techItems.map((t,i) => R('span', { key:i, style:{ display:'flex', gap:'44px', alignItems:'center' } },
+        R('span', null, t),
+        R('span', { style:{ color:'#9281f7' } }, '/')
+      ))
+    );
+
+    const core = ['React','TypeScript','Next.js','Tailwind','SCSS','Redux Toolkit','RTK Query','Zustand','Framer Motion','Vite'];
+    const coreChips = R('div', { style:{ display:'contents' } }, core.map(c => this.chip(c, true)));
+
+    const patterns = [
+      ['Страницы и лендинги','адаптивная вёрстка'],
+      ['Формы и валидация','состояния загрузки и ошибок'],
+      ['Таблицы и карточки','фильтры и пагинация'],
+      ['Подключение к API','полная CRUD-интеграция'],
+    ];
+    const patternRows = R('div', { style:{ display:'contents' } }, patterns.map(([t,d],i) =>
+      R('div', { key:i, style:{ display:'flex', flexDirection:'column', gap:'3px', padding:'13px 0', borderTop: i===0 ? 'none':'1px solid #17191c' } },
+        R('span', { style:{ fontSize:'14px', color:'#f0f0f0', fontWeight:500 } }, t),
+        R('span', { style:{ fontFamily:"'Geist Mono',monospace", fontSize:'11.5px', color:'#6b6f72' } }, d)
+      )
+    ));
+
+    const ai = [
+      ['Context engineering','Собираю правильный контекст для задачи — быстрее и точнее.'],
+      ['Декомпозиция','Разбиваю сложное на шаги, которые можно проверить.'],
+      ['Контроль качества','Читаю, тестирую и правлю каждый результат вручную.'],
+      ['Ответственность','Финальные решения и логику держу за собой.'],
+    ];
+    const aiRows = R('div', { style:{ display:'contents' } }, ai.map(([t,d],i) =>
+      R('div', { key:i, style:{ display:'flex', gap:'16px', alignItems:'flex-start' } },
+        R('span', { style:{ fontFamily:"'Geist Mono',monospace", fontSize:'11px', color:'#9281f7', paddingTop:'3px', minWidth:'26px' } }, '0'+(i+1)),
+        R('div', null,
+          R('div', { style:{ fontSize:'15px', color:'#f0f0f0', fontWeight:500, marginBottom:'4px' } }, t),
+          R('div', { style:{ fontSize:'15px', color:'#a1a4a5', fontWeight:300, lineHeight:1.55 } }, d)
+        )
+      )
+    ));
+
+    const process = [
+      ['Разбираюсь','Вхожу в код и контекст, читаю документацию, понимаю ограничения.'],
+      ['Проектирую','Структура компонентов, состояние, данные и доступ до первой строки.'],
+      ['Собираю','Чистая типизированная реализация, адаптив и внимание к деталям UI.'],
+      ['Проверяю','Ручная проверка сценариев, ревью и доводка до продакшена.'],
+    ];
+    const processCards = R('div', { style:{ display:'contents' } }, process.map(([t,d],i) =>
+      R('div', { key:i, style:{ border:'1px solid #1c1f22', borderRadius:'16px', padding:'28px 24px', background:'#08090a', minHeight:'190px', display:'flex', flexDirection:'column' } },
+        R('span', { style:{ fontFamily:"'Geist',system-ui,sans-serif", fontWeight:600, fontSize:'28px', letterSpacing:'-.02em', color:'#9281f7', lineHeight:1, marginBottom:'20px' } }, '0'+(i+1)),
+        R('h3', { style:{ margin:'0 0 10px', fontSize:'17px', fontWeight:500, color:'#ffffff', letterSpacing:'-.01em' } }, t),
+        R('p', { style:{ margin:0, fontSize:'15px', lineHeight:1.55, color:'#a1a4a5', fontWeight:300 } }, d)
+      )
+    ));
+
+    // contacts
+    const I = (paths, vb) => R('svg', { width:18, height:18, viewBox: vb||'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:1.6, strokeLinecap:'round', strokeLinejoin:'round' }, paths);
+    const contacts = [
+      { label:'Telegram', href:'https://t.me/', icon: R('svg',{width:18,height:18,viewBox:'0 0 24 24',fill:'currentColor'}, R('path',{d:'M21.9 4.3l-3.3 15.6c-.25 1.1-.9 1.37-1.83.85l-5.05-3.72-2.44 2.35c-.27.27-.5.5-1.02.5l.36-5.15L17.4 6.3c.4-.36-.09-.56-.63-.2L6.5 12.6l-4.6-1.44c-1-.31-1.02-1 .21-1.48L20.6 2.9c.84-.31 1.57.2 1.3 1.4z'}) ) },
+      { label:'Email', href:'mailto:', icon: I([R('rect',{key:1,x:3,y:5,width:18,height:14,rx:2}),R('path',{key:2,d:'M3 7l9 6 9-6'})]) },
+      { label:'GitHub', href:'https://github.com/', icon: R('svg',{width:18,height:18,viewBox:'0 0 24 24',fill:'currentColor'}, R('path',{d:'M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49l-.01-1.7c-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.55-1.14-4.55-5.05 0-1.12.39-2.03 1.03-2.74-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 015 0c1.9-1.33 2.74-1.05 2.74-1.05.55 1.41.2 2.45.1 2.71.64.71 1.03 1.62 1.03 2.74 0 3.92-2.34 4.78-4.57 5.03.36.32.68.94.68 1.9l-.01 2.82c0 .27.18.6.69.49A10.02 10.02 0 0022 12.25C22 6.58 17.52 2 12 2z'}) ) },
+      { label:'WhatsApp', href:'https://wa.me/', icon: R('svg',{width:18,height:18,viewBox:'0 0 24 24',fill:'currentColor'}, R('path',{d:'M17.5 14.4c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35zM12 2a10 10 0 00-8.5 15.3L2 22l4.8-1.5A10 10 0 1012 2z'}) ) },
+      { label:'Instagram', href:'https://instagram.com/', icon: I([R('rect',{key:1,x:3,y:3,width:18,height:18,rx:5}),R('circle',{key:2,cx:12,cy:12,r:3.6}),R('circle',{key:3,cx:17.4,cy:6.6,r:1,fill:'currentColor',stroke:'none'})]) },
+    ];
+    const contactButtons = R('div', { style:{ display:'contents' } }, contacts.map((c,i) =>
+      R('a', { key:i, href:c.href, target:'_blank', rel:'noreferrer', className:'contact-link', style:{
+        display:'inline-flex', alignItems:'center', gap:'10px', textDecoration:'none',
+        color:'#f0f0f0', fontSize:'14px', fontWeight:500,
+        padding:'12px 20px', borderRadius:'11px', border:'1px solid #2b2f34',
+        background:'rgba(255,255,255,.025)', transition:'all .25s',
+      },
+      onMouseEnter: (e)=>{ e.currentTarget.style.borderColor='#4a4560'; e.currentTarget.style.background='rgba(146,129,247,.12)'; e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.querySelector('span.ci').style.color='#baa7ff'; },
+      onMouseLeave: (e)=>{ e.currentTarget.style.borderColor='#2b2f34'; e.currentTarget.style.background='rgba(255,255,255,.025)'; e.currentTarget.style.transform='none'; e.currentTarget.querySelector('span.ci').style.color='#a1a4a5'; }
+      },
+        R('span', { className:'ci', style:{ color:'#a1a4a5', display:'inline-flex', transition:'color .25s' } }, c.icon),
+        c.label
+      )
+    ));
+
+    return {
+      navRef: (n) => { this._nav = n; },
+      drawerRef: this.setDrawer, burgerRef: this.setBurger,
+      toggleMenu: this.toggleMenu, closeMenu: this.closeMenu,
+      techLine, coreChips, patternRows, aiRows, processCards, contactButtons
+    };
+  }
+}
+</script>
+</body>
+</html>
