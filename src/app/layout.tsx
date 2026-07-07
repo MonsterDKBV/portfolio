@@ -30,7 +30,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://portfolio-one-sooty-82.vercel.app'),
+  metadataBase: new URL('https://daniel-k-dev.vercel.app'),
   title: 'Daniel',
   description:
     'Frontend Developer — React, TypeScript, Next.js. Сайты, админ-панели, дашборды, каталоги и интеграции с API.',
@@ -40,17 +40,26 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'ru_RU',
-    url: '/',
+    url: 'https://daniel-k-dev.vercel.app',
     siteName: 'Daniel',
     title: 'Daniel — Frontend Developer',
     description:
       'Frontend Developer — React, TypeScript, Next.js. Сайты, админ-панели, дашборды, каталоги и интеграции с API.',
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Daniel — Frontend Developer',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Daniel — Frontend Developer',
     description:
       'Frontend Developer — React, TypeScript, Next.js.',
+    images: ['/opengraph-image.png'],
   },
   alternates: {
     canonical: '/',
