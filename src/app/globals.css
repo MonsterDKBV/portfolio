@@ -228,3 +228,30 @@ button:focus-visible {
 ::-webkit-scrollbar-thumb:hover {
   background: #3f3f46;
 }
+
+/* ============ PRINT STYLES ============ */
+@media print {
+  /* Hide navigation and footer */
+  header,
+  nav,
+  footer,
+  .site-nav,
+  .site-footer {
+    display: none !important;
+  }
+
+  /* Reset body for print */
+  body {
+    background: white !important;
+    color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide decorative elements */
+  .animate-float,
+  .animate-marquee,
+  .animate-pulse-dot {
+    animation: none !important;
+  }
+}

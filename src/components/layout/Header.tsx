@@ -1,12 +1,14 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 
 const navLinks = [
   { href: '#work', label: 'Работы' },
   { href: '#expertise', label: 'Стек' },
   { href: '#ai', label: 'AI-workflow' },
   { href: '#about', label: 'Обо мне' },
+  { href: '/resume', label: 'Резюме' },
 ]
 
 export function Header() {
@@ -94,28 +96,15 @@ export function Header() {
             textDecoration: 'none',
           }}
         >
-          <span
+          <Image
+            src="/favicon.ico"
+            alt="Logo"
+            width={26}
+            height={26}
             style={{
-              width: '26px',
-              height: '26px',
-              border: '1px solid #2b2f34',
-              borderRadius: '7px',
-              display: 'grid',
-              placeItems: 'center',
-              position: 'relative',
-              background: 'linear-gradient(145deg,#141518,#050506)',
+              borderRadius: '6px',
             }}
-          >
-            <span
-              style={{
-                width: '8px',
-                height: '8px',
-                background: '#9281f7',
-                borderRadius: '2px',
-                boxShadow: '0 0 12px rgba(146,129,247,.8)',
-              }}
-            />
-          </span>
+          />
           <span
             style={{
               fontSize: '14px',
