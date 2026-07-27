@@ -51,7 +51,7 @@ const contacts = [
   },
   {
     label: 'Instagram',
-    href: 'https://instagram.com/DanielKBV',
+    href: 'https://www.instagram.com/qwerty.abc_2024?igsh=aThyYTF5bzYxc2Iw',
     icon: (
       <svg
         width={18}
