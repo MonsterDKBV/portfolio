@@ -56,7 +56,7 @@ export default function ResumePage() {
             </div>
             <div className={styles.skillGroup}>
               <h3 className={styles.skillCategory}>Инструменты</h3>
-              <p className={styles.skillList}>Git, GitHub, Docker, Vercel, DigitalOcean, Directus, Strapi, Figma</p>
+              <p className={styles.skillList}>Git, GitHub, Docker, Vercel, DigitalOcean, Directus, Strapi, Figma, Claude Code, ChatGPT</p>
             </div>
           </div>
 
@@ -106,7 +106,7 @@ export default function ResumePage() {
 
           <section className={styles.mainSection}>
             <p className={styles.summary}>
-              Frontend-разработчик с 2.5+ годами коммерческого опыта. Специализируюсь на создании современных веб-приложений на React и Next.js. Работаю как с нуля, так и с существующими кодовыми базами. Участвую в полном цикле разработки: от сбора требований и проектирования компонентов до деплоя и передачи проекта заказчику. Пишу чистый, поддерживаемый код с фокусом на производительность и адаптивность интерфейсов.
+              Frontend-разработчик с 2.5+ годами коммерческого опыта. Специализируюсь на создании современных веб-приложений на React и Next.js. Работаю как с нуля, так и с существующими кодовыми базами. Участвую в полном цикле разработки: от сбора требований и проектирования компонентов до деплоя и передачи проекта заказчику. Пишу чистый, поддерживаемый код с фокусом на производительность и адаптивность интерфейсов. AI-инструменты (Claude Code, GPT) применяю для анализа задач, рефакторинга и поиска ошибок — финальные решения и качество кода остаются моей ответственностью.
             </p>
           </section>
 
