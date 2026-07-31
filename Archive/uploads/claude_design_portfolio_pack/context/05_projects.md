@@ -1,6 +1,6 @@
 # Final Project List
 
-## 1. Система заказов для ресторана
+## 1. Система заказов для чайханы
 Source project: Chuygun
 Visual refs: `references/project_screens_blurred/01_chuygun_restaurant/`
 Use 3 screens.

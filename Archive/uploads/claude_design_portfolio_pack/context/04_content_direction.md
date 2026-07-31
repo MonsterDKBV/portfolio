@@ -22,7 +22,7 @@ Instead of:
 'Confidential POS System'
 
 Prefer:
-'Система заказов для ресторана'
+'Система заказов для чайханы'
 
 Instead of overcomplicated descriptions,
 use direct language explaining what the interface does and why it mattered.

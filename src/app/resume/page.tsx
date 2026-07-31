@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import styles from './resume.module.css'
 
 export const metadata: Metadata = {
@@ -13,6 +14,20 @@ export default function ResumePage() {
       <div className={styles.resumeContainer}>
         {/* Left Column - Sidebar */}
         <aside className={styles.resumeSidebar}>
+          {/* Portrait */}
+          <div className={styles.portraitWrapper}>
+            <div className={styles.portraitFrame}>
+              <Image
+                src="/portrait.jpg"
+                alt="Даниэл Кубанычбеков"
+                width={100}
+                height={100}
+                className={styles.portraitImage}
+                priority
+              />
+            </div>
+          </div>
+
           <div className={styles.sidebarHeader}>
             <h1 className={styles.sidebarName}>Даниэл Кубанычбеков</h1>
             <p className={styles.sidebarTitle}>Frontend Developer</p>
@@ -91,7 +106,7 @@ export default function ResumePage() {
           <div className={styles.sidebarSection}>
             <h2 className={styles.sectionTitle}>Языки</h2>
             <div className={styles.langList}>
-              <span>Русский — родной</span>
+              <span>Русский — разговорный</span>
               <span>Кыргызский — родной</span>
             </div>
           </div>
@@ -114,8 +129,8 @@ export default function ResumePage() {
             <h2 className={styles.sectionHeading}>Опыт работы</h2>
             <div className={styles.experienceItem}>
               <div className={styles.expHeader}>
-                <span className={styles.expCompany}>Monster Ecosystem</span>
-                <span className={styles.expDate}>2022 — настоящее время</span>
+                <span className={styles.expCompany}>Monster</span>
+                <span className={styles.expDate}>2024 — настоящее время</span>
               </div>
               <p className={styles.expRole}>Frontend Developer</p>
               <ul className={styles.expList}>
@@ -135,7 +150,7 @@ export default function ResumePage() {
             <div className={styles.projectItem}>
               <div className={styles.projHeader}>
                 <div className={styles.projTitleRow}>
-                  <span className={styles.projName}>Система заказов для ресторана</span>
+                  <span className={styles.projName}>Система заказов для чайханы</span>
                   <span className={styles.projTag}>Коммерческий</span>
                 </div>
                 <span className={styles.projStack}>Next.js · TypeScript · Tailwind</span>
@@ -151,7 +166,7 @@ export default function ResumePage() {
                 </div>
                 <span className={styles.projStack}>React · TypeScript · State Machine</span>
               </div>
-              <p className={styles.projDesc}>Система управления задачами с созданием, статусами, референсами и синхронизацией состояний между компонентами</p>
+              <p className={styles.projDesc}>Система управления задачами с созданием, статусами, референсами и обработкой сложных форм и валидацией данных</p>
             </div>
 
             <div className={styles.projectItem}>

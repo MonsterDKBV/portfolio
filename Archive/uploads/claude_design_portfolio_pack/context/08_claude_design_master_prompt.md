@@ -82,7 +82,7 @@ You may restructure if you find a better information architecture.
 
 ## Project usage
 Use these 5 projects as the portfolio cases:
-1. Система заказов для ресторана
+1. Система заказов для чайханы
 2. Task Management Dashboard
 3. B2B каталог товаров
 4. BigBoard / внутренняя панель

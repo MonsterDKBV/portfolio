@@ -3,7 +3,7 @@ import type { Project } from '@/types/project'
 export const projects: readonly Project[] = [
   {
     id: 'restaurant-orders',
-    title: 'Система заказов для ресторана',
+    title: 'Система заказов для чайханы',
     type: 'Публичный сайт + внутренняя админка',
     role: 'Frontend — сайт, меню, корзина, админка',
     tasks: 'Публичная часть, меню, корзина, оформление заказа, статусы и административные экраны.',
