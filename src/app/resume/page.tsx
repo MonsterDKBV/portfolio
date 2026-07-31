@@ -202,30 +202,6 @@ export default function ResumePage() {
               <p className={styles.projDesc}>Публичный сайт с интерактивным тестом уровня, таймером, результатами и интеграцией с CMS</p>
             </div>
           </section>
-
-          <section className={`${styles.mainSection} ${styles.achievementsSection}`}>
-            <h2 className={styles.sectionHeading}>Ключевые показатели</h2>
-            <div className={styles.achievementsGrid}>
-              <div className={styles.achievement}>
-                <span className={styles.achValue}>2.5+</span>
-                <span className={styles.achLabel}>года опыта</span>
-              </div>
-              <div className={styles.achievement}>
-                <span className={styles.achValue}>30+</span>
-                <span className={styles.achLabel}>проектов</span>
-              </div>
-              <div className={styles.achievement}>
-                <span className={styles.achValue}>10+</span>
-                <span className={styles.achLabel}>в продакшн</span>
-              </div>
-              <div className={styles.achievementText}>
-                <span>React / Next.js</span>
-                <span>REST API</span>
-                <span>Responsive</span>
-                <span>CMS</span>
-              </div>
-            </div>
-          </section>
         </div>
       </div>
     </div>
