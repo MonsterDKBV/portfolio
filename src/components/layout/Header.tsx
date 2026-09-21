@@ -8,7 +8,8 @@ const navLinks = [
   { href: '#expertise', label: 'Стек' },
   { href: '#ai', label: 'AI-workflow' },
   { href: '#about', label: 'Обо мне' },
-  { href: '/resume', label: 'Резюме' },
+  // Hidden for now, uncomment to restore the resume link
+  // { href: '/resume', label: 'Резюме' },
 ]
 
 export function Header() {

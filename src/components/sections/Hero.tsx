@@ -226,13 +226,13 @@ export function Hero() {
               }}
             >
               Смотреть работы
-              <span style={{ fontFamily: "'Geist Mono',monospace" }}>→</span>
+              <span style={{ fontFamily: "'Geist Mono',monospace", fontSize: '20px', lineHeight: 1 }}>→</span>
             </a>
             <a
               href="/resume.pdf"
               download="Resume — Daniel Kubanychbekov.pdf"
               style={{
-                display: 'inline-flex',
+                display: 'none', // hidden for now, change to 'inline-flex' to restore
                 alignItems: 'center',
                 gap: '9px',
                 fontSize: '14px',
