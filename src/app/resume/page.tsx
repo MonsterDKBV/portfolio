@@ -177,9 +177,10 @@ export default function ResumePage() {
             <div className={styles.experienceItem}>
               <div className={styles.expHeader}>
                 <span className={styles.expCompany}>Monster</span>
-                <span className={styles.expDate}>2024 — 2026</span>
               </div>
-              <p className={styles.expRole}>Frontend Developer</p>
+              <p className={styles.expRole}>
+                Frontend Developer · Февраль 2024 — Август 2026
+              </p>
               <ul className={styles.expList}>
                 <li>
                   Разрабатывал и поддерживал коммерческие веб-приложения на
