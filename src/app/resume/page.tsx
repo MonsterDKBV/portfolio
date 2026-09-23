@@ -32,6 +32,9 @@ export default function ResumePage() {
             <h1 className={styles.sidebarName}>Даниэл Кубанычбеков</h1>
             <p className={styles.sidebarTitle}>Frontend Developer</p>
             <p className={styles.sidebarLocation}>Бишкек, Кыргызстан</p>
+            <p className={styles.sidebarLocationNote}>
+              Офис в Бишкеке / удалённо, готов работать по МСК
+            </p>
           </div>
 
           <div className={styles.sidebarContacts}>
@@ -108,8 +111,8 @@ export default function ResumePage() {
             <div className={styles.skillGroup}>
               <h3 className={styles.skillCategory}>Инструменты</h3>
               <p className={styles.skillList}>
-                Git, GitHub, Docker, Vercel, DigitalOcean, Directus, Strapi,
-                Figma, Claude Code, ChatGPT
+                Git, GitHub, Docker, Vercel, DigitalOcean, Supabase, Directus,
+                Strapi, Figma, Claude Code, ChatGPT
               </p>
             </div>
           </div>
@@ -123,30 +126,36 @@ export default function ResumePage() {
               <span>State Management</span>
               <span>Оптимизация производительности</span>
               <span>SEO</span>
-              <span>Git Workflow</span>
-              <span>Code Review</span>
+              <span>Git Workflow, Code Review</span>
               <span>CMS интеграция</span>
               <span>Деплой проектов</span>
+              <span>Распределение задач в команде</span>
+              <span>Коммуникация с клиентами</span>
             </div>
           </div>
 
           <div className={styles.sidebarSection}>
-            <h2 className={styles.sectionTitle}>Специализация</h2>
-            <div className={styles.competenceList}>
-              <span>Корпоративные сайты</span>
-              <span>Админ-панели</span>
-              <span>CRM-системы</span>
-              <span>Интернет-магазины</span>
-              <span>Landing Pages</span>
-              <span>Web Applications</span>
+            <h2 className={styles.sectionTitle}>Образование</h2>
+            <div className={styles.eduList}>
+              <div className={styles.eduItem}>
+                <p className={styles.eduName}>PeakSoft</p>
+                <p className={styles.eduRole}>Frontend-разработчик</p>
+                <p className={styles.eduMeta}>2022 — 2023 · React, JavaScript</p>
+              </div>
+              <div className={styles.eduItem}>
+                <p className={styles.eduName}>PurpleSchool</p>
+                <p className={styles.eduRole}>Антон Ларичев</p>
+                <p className={styles.eduMeta}>TypeScript, Next.js</p>
+              </div>
             </div>
           </div>
 
           <div className={styles.sidebarSection}>
             <h2 className={styles.sectionTitle}>Языки</h2>
             <div className={styles.langList}>
-              <span>Русский — разговорный</span>
               <span>Кыргызский — родной</span>
+              <span>Русский — свободный</span>
+              <span>Английский — начальный (A1)</span>
             </div>
           </div>
         </aside>
@@ -160,15 +169,15 @@ export default function ResumePage() {
 
           <section className={styles.mainSection}>
             <p className={styles.summary}>
-              Frontend-разработчик с 2.5+ годами коммерческого опыта.
-              Специализируюсь на создании современных веб-приложений на React и
-              Next.js. Работаю как с нуля, так и с существующими кодовыми
-              базами. Участвую в полном цикле разработки: от сбора требований и
-              проектирования компонентов до деплоя и передачи проекта заказчику.
-              Пишу чистый, поддерживаемый код с фокусом на производительность и
-              адаптивность интерфейсов. AI-инструменты (Claude Code, GPT)
-              применяю для анализа задач, рефакторинга и поиска ошибок —
-              финальные решения и качество кода остаются моей ответственностью.
+              Frontend-разработчик с 2.5+ годами коммерческого опыта в
+              digital-агентстве. Прошёл путь от junior-разработчика до
+              заместителя руководителя отдела разработки. Создаю
+              веб-приложения на React и Next.js и участвую в полном цикле: от
+              сбора требований у клиента до деплоя и передачи проекта. Помимо
+              разработки распределяю задачи в команде и веду созвоны с
+              клиентами. AI-инструменты (Claude Code, GPT) применяю для
+              анализа задач, рефакторинга и поиска ошибок — финальные решения
+              и качество кода остаются моей ответственностью.
             </p>
           </section>
 
@@ -176,38 +185,60 @@ export default function ResumePage() {
             <h2 className={styles.sectionHeading}>Опыт работы</h2>
             <div className={styles.experienceItem}>
               <div className={styles.expHeader}>
-                <span className={styles.expCompany}>Monster</span>
+                <span className={styles.expCompany}>Monster Agency</span>
+                <span className={styles.expCompanyMeta}>
+                  · digital-агентство, Бишкек · Февраль 2024 — Август 2026
+                </span>
               </div>
-              <p className={styles.expRole}>
-                Frontend Developer · Февраль 2024 — Август 2026
-              </p>
-              <ul className={styles.expList}>
-                <li>
-                  Разрабатывал и поддерживал коммерческие веб-приложения на
-                  React и Next.js
-                </li>
-                <li>
-                  Создавал административные панели, дашборды и клиентские
-                  интерфейсы
-                </li>
-                <li>
-                  Интегрировал REST API и организовывал работу с данными на
-                  клиенте
-                </li>
-                <li>
-                  Работал напрямую с заказчиками: сбор требований, согласование
-                  и доставка
-                </li>
-                <li>Выполнял деплой проектов на Vercel и DigitalOcean</li>
-                <li>
-                  Настраивал интеграции с CMS (Directus, Strapi) и CRM-системами
-                </li>
-              </ul>
+
+              <div className={styles.expPosition}>
+                <p className={styles.expPositionTitle}>
+                  Frontend Developer / Заместитель руководителя отдела
+                  разработки (Devz)
+                </p>
+                <p className={styles.expRole}>Сентябрь 2025 — Август 2026</p>
+                <ul className={styles.expList}>
+                  <li>
+                    Помогал руководителю отдела вести команду: декомпозировал
+                    задачи, распределял их между разработчиками и
+                    контролировал сроки
+                  </li>
+                  <li>
+                    Проводил созвоны с клиентами: сбор требований,
+                    согласование решений, демонстрация результатов
+                  </li>
+                  <li>Продолжал разрабатывать ключевые проекты отдела</li>
+                </ul>
+              </div>
+
+              <div className={styles.expPosition}>
+                <p className={styles.expPositionTitle}>Frontend Developer</p>
+                <p className={styles.expRole}>Февраль 2024 — Сентябрь 2025</p>
+                <ul className={styles.expList}>
+                  <li>
+                    Разрабатывал и поддерживал коммерческие веб-приложения на
+                    React и Next.js: админ-панели, дашборды, клиентские
+                    интерфейсы
+                  </li>
+                  <li>
+                    Самостоятельно довёл до продакшна 10+ проектов (Vercel,
+                    DigitalOcean + Docker)
+                  </li>
+                  <li>
+                    Интегрировал REST API, CMS (Directus, Strapi) и
+                    CRM-системы
+                  </li>
+                </ul>
+              </div>
             </div>
           </section>
 
           <section className={styles.mainSection}>
             <h2 className={styles.sectionHeading}>Избранные проекты</h2>
+            <p className={styles.projectsNote}>
+              Часть проектов под NDA — подробно расскажу о задачах и решениях
+              на собеседовании.
+            </p>
 
             <div className={styles.projectItem}>
               <div className={styles.projHeader}>
@@ -217,14 +248,32 @@ export default function ResumePage() {
                   </span>
                   <span className={styles.projTag}>Коммерческий</span>
                 </div>
-                <span className={styles.projStack}>
-                  Next.js · TypeScript · Tailwind
-                </span>
               </div>
               <p className={styles.projDesc}>
-                Полный цикл заказа: каталог меню, корзина, оформление,
-                отслеживание статуса, административная панель для управления
-                заказами
+                Заменил устную передачу заказов на кухню цифровой системой:
+              </p>
+              <ul className={styles.projList}>
+                <li>
+                  Официант собирает заказ на планшете — кухня сразу получает
+                  его на принтере с номером стола
+                </li>
+                <li>
+                  Повар отмечает готовность блюда кнопкой, официант видит
+                  смену статуса в реальном времени
+                </li>
+                <li>
+                  В конце печатается общий пречек стола с итоговой суммой на
+                  отдельном принтере
+                </li>
+              </ul>
+              <p className={styles.projResult}>
+                <strong>Результат:</strong> официантам больше не нужно ходить
+                на кухню, чтобы передать заказ или проверить готовность блюд.
+              </p>
+              <p className={styles.projFooterStack}>
+                <span className={styles.projFooterStackLabel}>Стек:</span>{" "}
+                React, TypeScript, Supabase (Realtime), REST API, печать на
+                принтеры по локальной сети (LAN/Wi-Fi)
               </p>
             </div>
 
@@ -242,7 +291,7 @@ export default function ResumePage() {
               </div>
               <p className={styles.projDesc}>
                 Система управления задачами с созданием, статусами, референсами
-                и обработкой сложных форм и валидацией данных
+                и обработкой сложных форм с валидацией данных
               </p>
             </div>
 
@@ -268,7 +317,7 @@ export default function ResumePage() {
                   <span className={styles.projName}>
                     Платформа управления контентом
                   </span>
-                  <span className={styles.projTag}>CRM</span>
+                  <span className={styles.projTag}>CMS</span>
                 </div>
                 <span className={styles.projStack}>
                   React · TypeScript · Kanban
